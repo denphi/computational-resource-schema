@@ -1,0 +1,1 @@
+Sample resource descriptions expressed in JSON Schema
