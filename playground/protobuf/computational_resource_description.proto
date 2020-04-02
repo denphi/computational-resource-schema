@@ -1,0 +1,70 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * The computational_resource_description.proto is a early draft
+ * towards uniform semantics for describing resources.
+ */
+
+syntax = "proto3";
+
+package sgci.computeresourcedescription;
+
+message ComputeResourceDescription {
+    string id = 1; //Unique identifier for the resource
+    string name = 2; //Human-readable, displayable name for the resource
+    string description = 3; //Description of resource
+
+    message Host {
+        string hostname = 1;
+        string ip = 2;
+        int32 priority = 3;
+    }
+    repeated Host hosts = 4;
+
+    message Connection {
+        int32 port = 1;
+        repeated string connection_protocols = 2; //examples: SSH, Globus, HTTP, SFTP, SCP, iRODS
+        repeated string security_protocols = 3; // passwords, SSHKEYS, X509 certs, OAuth2
+        string proxy_hostname = 4;
+        int32 proxy_port = 5;
+    }
+    repeated Connection connections = 5;
+
+    enum ResourceType {
+        COMPUTE_RESOURCE = 0;
+        STORAGE_RESOURCE = 1;
+        // DATABASE = 2; //This is placeholder
+    }
+    ResourceType type = 6;
+
+    message StorageAttributes {
+        Connection connection = 1;
+
+        message FileSystems {
+            string home_directory = 1;
+            string scratch_directory = 2;
+            string work_directory = 3;
+            string archive_directory = 4;
+        }
+
+        FileSystems filesystems = 2;
+        string storage_type = 3; //POSIX, s3, object store...
+    }
+    StorageAttributes storage_attributes = 7;
+}
