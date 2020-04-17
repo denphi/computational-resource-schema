@@ -1,0 +1,56 @@
+{
+  "hosts" : [{
+    "hostname" : "comet.sdsc.edu",
+   	"priority" : 1
+  }],
+  "connection" : [{
+    "port" : 22,
+    "protocol" : "SSH",
+    "security" : "SSHKEYS"
+  }],
+  "resource" : {
+  	"class" : "COMPUTE",
+    "commands":[{
+      "type" : "mpi",
+      "prefix" : "mpirun",
+      "modules" : "./bashrc"
+    }],
+    "attributes":{
+	  "type" : "BATCH",
+      "paths" : ["SUBMISSION"],
+      "partitions" : [{
+        "name" : "gpu-shared",
+        "nodes" : 1944,
+        "cores" : 46656,
+        "quotas" : [{
+          "name" : "default",
+          "job_per_user" : 1,
+          "total_jobs": 50,
+          "node_per_job": 1,
+          "time_per_job": 1000,
+          "memory_per_job": 40,
+          "gpu_per_job": 1
+        }]
+      },{
+        "name" : "gpu",
+        "nodes" : 1944,
+        "cores" : 46656,
+        "quotas" : [{
+          "name" : "default",
+          "job_per_user" : 1,
+          "total_jobs": 50,
+          "node_per_job": 1,
+          "time_per_job": 1000,
+          "memory_per_job": 40,
+          "gpu_per_job": 1
+        }]
+      }],
+      "hardware" : [{
+        "name" : "default",
+        "memory" : 128,
+        "cpu" : 24,
+        "gpu" : 0
+      }]
+    }
+  }
+}
